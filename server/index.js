@@ -1,36 +1,26 @@
+const express = require("express");
+const socketIO = require("socket.io");
+const path = require("path");
 
-const http = require('http').createServer();
+const PORT = process.env.PORT || 3000;
+const INDEX = "/index.html";
 
-const io = require('socket.io')(http, {
-    cors: { origin: "*" }
+const server = express()
+  .use((req, res) =>
+    res.sendFile(path.join(__dirname, "..", "/app", "index.html"))
+  )
+  .listen(PORT, () => console.log(`listening on ${PORT}`));
+
+const io = socketIO(server);
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  socket.on("message", (message) => {
+    console.log(message);
+    io.emit("message", `${socket.id.substr(0, 2)} said ${message}`);
+  });
+  socket.on("disconect", () => console.log("Client disconnected"));
 });
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    socket.on('message', (message) =>     {
-        console.log(message);
-        io.emit('message', `${socket.id.substr(0,2)} said ${message}` );   
-    });
-});
-
-http.listen(8080, () => console.log('listening on http://localhost:8080') );
-
-
-// Regular Websockets
-
-// const WebSocket = require('ws')
-// const server = new WebSocket.Server({ port: '8080' })
-
-// server.on('connection', socket => { 
-
-//   socket.on('message', message => {
-
-//     socket.send(`Roger that! ${message}`);
-
-//   });
-
-// });
-
-
- 
+setInterval(() => io.emit("time", new Date().toTimeString()), 1000);
