@@ -11,14 +11,14 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "/app")));
 
 server = http.Server(app);
-server.listen(PORT);
+server.listen(PORT, () => console.log("server is listening on port " + PORT));
 io = socketIO(server, {
   cors: {
     origin: "https://a-pleasant-experience.herokuapp.com/",
     methods: ["GET", "POST"],
   },
 });
-
+io = socketIO(server);
 let users = [];
 
 io.on("connection", (socket) => {

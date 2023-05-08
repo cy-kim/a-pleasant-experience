@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   mySlider.addEventListener("change", () => {
-    console.log("sliding");
     socket.emit("checkboxChange", {
       id: socket.id,
       isPlaying: myCheckbox.checked,
@@ -59,13 +58,14 @@ startup().then(() => {
       if (userList[i] == undefined) return;
       device.parametersById.get(`polything/${i + 1}/gatey`).value =
         userList[i].isPlaying;
-      device.parametersById.get(`polything/${i + 1}/midival`).value =
-        userList[i].pitch;
+      device.parametersById.get(`polything/${i + 1}/midival`).value = Number(
+        userList[i].pitch
+      );
     }
   }, 1000);
 });
 
-const socket = io("https://a-pleasant-experience.herokuapp.com/");
+const socket = io("ws://localhost:3000");
 
 //https://a-pleasant-experience.herokuapp.com/
 //ws://localhost:3000
@@ -91,10 +91,10 @@ socket.on("userList", (data) => {
       slider.type = "range";
       slider.min = "0";
       slider.max = "1500";
-      slider.value = pitch;
+      slider.value = Number(pitch);
       label.appendChild(checkbox);
       label.appendChild(slider);
-      label.appendChild(document.createTextNode(`id: ${id}`));
+      // label.appendChild(document.createTextNode(`id: ${id}`));
       checkBoxDiv.appendChild(label);
     }
   });
