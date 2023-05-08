@@ -1,7 +1,13 @@
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const socketIO = require("socket.io");
+const socketIO = require("socket.io")(httpServer, {
+  cors: {
+    origin: "https://a-pleasant-experience.herokuapp.com/",
+    methods: ["GET", "POST"],
+    withCredentials: true,
+  },
+});
 const path = require("path");
 var http = require("http");
 let server, io;

@@ -1,4 +1,6 @@
-const socket = io();
+const socket = io("https://a-pleasant-experience.herokuapp.com/", {
+  withCredentials: true,
+});
 
 socket.on("message", (text) => {
   const el = document.createElement("li");
