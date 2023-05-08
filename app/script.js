@@ -64,7 +64,7 @@ startup().then(() => {
   }, 1000);
 });
 
-const socket = io("ws://localhost:3000");
+const socket = io("https://a-pleasant-experience.herokuapp.com/");
 
 //https://a-pleasant-experience.herokuapp.com/
 //ws://localhost:3000
