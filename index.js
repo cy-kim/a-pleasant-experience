@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const socketIO = require("socket.io");
@@ -6,7 +7,7 @@ var http = require("http");
 let server, io;
 
 const PORT = process.env.PORT || 3000;
-
+app.use(cors);
 app.use(express.static(path.join(__dirname, "/app")));
 
 server = http.Server(app);
@@ -23,4 +24,4 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => console.log("Client disconnected"));
 });
 
-setInterval(() => io.emit("time", new Date().toTimeString()), 1000);
+// setInterval(() => io.emit("time", new Date().toTimeString()), 1000);
