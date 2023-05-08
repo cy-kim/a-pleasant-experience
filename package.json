@@ -11,5 +11,7 @@
   },
   "scripts": {
     "start": "node index.js"
-  }
+  },
+  "repository": "git@github.com:cy-kim/a-pleasant-experience.git",
+  "author": "Cy Kim <kimseongyeun@gmail.com>"
 }

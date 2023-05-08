@@ -1,2 +1,2 @@
-/server/node_modules
-/server/yarn.lock
+node_modules
+yarn.lock

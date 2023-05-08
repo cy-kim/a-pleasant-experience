@@ -6,9 +6,7 @@ const PORT = process.env.PORT || 3000;
 const INDEX = "/index.html";
 
 const server = express()
-  .use((req, res) =>
-    res.sendFile(path.join(__dirname, "..", "/app", "index.html"))
-  )
+  .use((req, res) => res.sendFile(path.join(__dirname, "/app", "index.html")))
   .listen(PORT, () => console.log(`listening on ${PORT}`));
 
 const io = socketIO(server);
