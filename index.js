@@ -24,7 +24,7 @@ let users = [];
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  users.push({ id: socket.id, isPlaying: false });
+  users.push({ id: socket.id, isPlaying: false, pitch: 0 });
   io.emit("userList", users);
   socket.on("userList", () => {
     console.log(users);
@@ -35,8 +35,10 @@ io.on("connection", (socket) => {
     for (let i = 0; i < users.length; i++) {
       if (users[i].id == socket.id) {
         users[i].isPlaying = data.isPlaying;
+        users[i].pitch = data.pitch;
       }
     }
+    console.log(users);
     io.emit("userList", users);
   });
 
