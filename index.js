@@ -1,13 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const socketIO = require("socket.io")(httpServer, {
-  cors: {
-    origin: "https://a-pleasant-experience.herokuapp.com/",
-    methods: ["GET", "POST"],
-    withCredentials: true,
-  },
-});
+const socketIO = require("socket.io");
 const path = require("path");
 var http = require("http");
 let server, io;
@@ -18,7 +12,12 @@ app.use(express.static(path.join(__dirname, "/app")));
 
 server = http.Server(app);
 server.listen(PORT);
-io = socketIO(server);
+io = socketIO(server, {
+  cors: {
+    origin: "https://a-pleasant-experience.herokuapp.com/",
+    methods: ["GET", "POST"],
+  },
+});
 
 io.on("connection", (socket) => {
   console.log("a user connected");
