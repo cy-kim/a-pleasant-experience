@@ -19,14 +19,34 @@ io = socketIO(server, {
   },
 });
 
+let users = [];
+
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("message", (message) => {
-    console.log(message);
-    io.emit("message", `${socket.id.substr(0, 2)} said ${message}`);
+  users.push({ id: socket.id, isPlaying: false });
+  io.emit("userList", users);
+  socket.on("userList", () => {
+    console.log(users);
+    socket.emit("userList", users);
   });
-  socket.on("disconnect", () => console.log("Client disconnected"));
-});
 
-// setInterval(() => io.emit("time", new Date().toTimeString()), 1000);
+  socket.on("checkboxChange", (data) => {
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].id == socket.id) {
+        users[i].isPlaying = data.isPlaying;
+      }
+    }
+    io.emit("userList", users);
+  });
+
+  socket.on("disconnect", () => {
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].id == socket.id) {
+        users.splice(i, 1);
+      }
+    }
+    io.emit("userList", users);
+    console.log("Client disconnected", users);
+  });
+});
