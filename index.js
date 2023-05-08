@@ -1,17 +1,17 @@
-"use strict";
-
 const express = require("express");
+const app = express();
 const socketIO = require("socket.io");
 const path = require("path");
+var http = require("http");
+let server, io;
 
 const PORT = process.env.PORT || 3000;
-const INDEX = "/index.html";
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`listening on ${PORT}`));
+app.use(express.static(path.join(__dirname, "/app")));
 
-const io = socketIO(server);
+server = http.Server(app);
+server.listen(PORT);
+io = socketIO(server);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
@@ -23,4 +23,4 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => console.log("Client disconnected"));
 });
 
-// setInterval(() => io.emit("time", new Date().toTimeString()), 1000);
+setInterval(() => io.emit("time", new Date().toTimeString()), 1000);

@@ -13,5 +13,8 @@
     "start": "node index.js"
   },
   "repository": "git@github.com:cy-kim/a-pleasant-experience.git",
-  "author": "Cy Kim <kimseongyeun@gmail.com>"
+  "author": "Cy Kim <kimseongyeun@gmail.com>",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
