@@ -59,7 +59,8 @@ startup().then(() => {
       if (userList[i] == undefined) return;
       device.parametersById.get(`polything/${i + 1}/gatey`).value =
         userList[i].isPlaying;
-      device.parametersById.get(`polything/${i + 1}/midival`).value = 500;
+      device.parametersById.get(`polything/${i + 1}/midival`).value =
+        userList[i].pitch;
     }
   }, 1000);
 });
