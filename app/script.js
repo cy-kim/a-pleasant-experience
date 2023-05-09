@@ -1,7 +1,7 @@
 let userList = [];
 let polyParams = [];
 let isLoading = true;
-let voices = 8;
+let voices = 32;
 let device;
 const { createDevice } = RNBO;
 let play1;
@@ -45,8 +45,8 @@ const startup = async () => {
 
   device = await createDevice({ context, patcher: polyPatcher });
 
-  play1 = device.parametersById.get("polything/8/gatey");
-  pitch1 = device.parametersById.get("polything/8/midival");
+  play1 = device.parametersById.get("polything/32/gatey");
+  pitch1 = device.parametersById.get("polything/32/midival");
 
   device.node.connect(context.destination);
   isLoading = false;
