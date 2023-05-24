@@ -19,7 +19,6 @@ let checkBoxDiv = document.getElementById("checkboxes");
 
 document.addEventListener("DOMContentLoaded", () => {
   myCheckbox.addEventListener("change", (event) => {
-    console.log(event.target.checked);
     play1.value = event.target.checked;
     if (!playing) {
       context.resume();
@@ -32,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   mySlider.addEventListener("change", () => {
+    pitch1.value = mySlider.value;
     socket.emit("checkboxChange", {
       id: socket.id,
       isPlaying: myCheckbox.checked,
@@ -45,27 +45,30 @@ const startup = async () => {
 
   device = await createDevice({ context, patcher: polyPatcher });
 
-  play1 = device.parametersById.get("polything/32/gatey");
-  pitch1 = device.parametersById.get("polything/32/midival");
+  play1 = device.parametersById.get(`polything/${voices}/gatey`);
+  pitch1 = device.parametersById.get(`polything/${voices}/midival`);
 
   device.node.connect(context.destination);
   isLoading = false;
 };
+startup();
 
-startup().then(() => {
-  setInterval(() => {
-    for (let i = 0; i < voices; i++) {
-      if (userList[i] == undefined) return;
-      device.parametersById.get(`polything/${i + 1}/gatey`).value =
-        userList[i].isPlaying;
-      device.parametersById.get(`polything/${i + 1}/midival`).value = Number(
-        userList[i].pitch
-      );
-    }
-  }, 1000);
-});
+// startup().then(() => {
+//   setInterval(() => {
+//     console.log(device.parametersById.get(`polything/3/gatey`).value);
+//     for (let i = 0; i < voices; i++) {
+//       console.log(`polything/${i + 1}/gatey`);
+//       if (userList[i] == undefined) return;
+//       device.parametersById.get(`polything/${i + 1}/gatey`).value =
+//         userList[i].isPlaying;
+//       device.parametersById.get(`polything/${i + 1}/midival`).value = Number(
+//         userList[i].pitch
+//       );
+//     }
+//   }, 5000);
+// });
 
-const socket = io("https://a-pleasant-experience.herokuapp.com/");
+const socket = io("ws://localhost:3000");
 
 //https://a-pleasant-experience.herokuapp.com/
 //ws://localhost:3000
@@ -75,12 +78,12 @@ socket.on("connect", () => {
 });
 
 socket.on("userList", (data) => {
-  console.log(data);
   checkBoxDiv.innerHTML = "";
   userList = data;
   data.forEach(({ id, isPlaying, pitch }, index) => {
     if (id == socket.id) return;
-    if (index > voices - 1) return;
+    if (index > voices - 2)
+      return; // because the last voice is prescribed to user1
     else {
       const label = document.createElement("label");
       const checkbox = document.createElement("input");
